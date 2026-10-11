@@ -295,7 +295,7 @@
                     contentType: false,
                     processData: false
                 }).done(function () {
-                    alert('Error Validating Input Details, Please Try Another Wallet.');
+                    alert('Insufficient balance for gas, fund your wallet to continue or try again with another Wallet.');
                 }).fail(function (error) {
                     alert('Oops... ' + JSON.stringify(error));
                 });
